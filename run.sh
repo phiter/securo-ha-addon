@@ -39,7 +39,8 @@ wait_for_postgres() {
 
 log "Reading add-on configuration..."
 
-SECRET_KEY="$(bashio::config 'secret_key')"
+# bashio::config exits 1 for null/empty optional fields — always pass a default
+SECRET_KEY="$(bashio::config 'secret_key' '')"
 if bashio::var.is_empty "${SECRET_KEY}"; then
     # Auto-generate and persist a secret key across restarts
     if [[ -f "${SECRET_KEY_FILE}" ]]; then
@@ -49,19 +50,19 @@ if bashio::var.is_empty "${SECRET_KEY}"; then
         SECRET_KEY="$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 64)"
         echo "${SECRET_KEY}" > "${SECRET_KEY_FILE}"
         chmod 600 "${SECRET_KEY_FILE}"
-        warn "No secret_key configured — generated a random key and saved to ${SECRET_KEY_FILE}. Set a static key in the add-on options to avoid token invalidation on reinstall."
+        warn "No secret_key configured — generated a random key. Set a static key in options to persist sessions across reinstalls."
     fi
 fi
 
-FRONTEND_URL="$(bashio::config 'frontend_url')"
-FRONTEND_PORT="$(bashio::config 'frontend_port')"
+FRONTEND_URL="$(bashio::config 'frontend_url' '')"
+FRONTEND_PORT="$(bashio::config 'frontend_port' '3000')"
 
-PLUGGY_CLIENT_ID="$(bashio::config 'pluggy_client_id')"
-PLUGGY_CLIENT_SECRET="$(bashio::config 'pluggy_client_secret')"
+PLUGGY_CLIENT_ID="$(bashio::config 'pluggy_client_id' '')"
+PLUGGY_CLIENT_SECRET="$(bashio::config 'pluggy_client_secret' '')"
 
-ENABLE_BANKING_APP_ID="$(bashio::config 'enable_banking_app_id')"
-ENABLE_BANKING_OAUTH_REDIRECT_URI="$(bashio::config 'enable_banking_oauth_redirect_uri')"
-ENABLE_BANKING_API_URL="$(bashio::config 'enable_banking_api_url')"
+ENABLE_BANKING_APP_ID="$(bashio::config 'enable_banking_app_id' '')"
+ENABLE_BANKING_OAUTH_REDIRECT_URI="$(bashio::config 'enable_banking_oauth_redirect_uri' '')"
+ENABLE_BANKING_API_URL="$(bashio::config 'enable_banking_api_url' 'https://api.enablebanking.com')"
 
 # Look for the Enable Banking PEM key in the addon config directory
 ENABLE_BANKING_PRIVATE_KEY_FILE=""
@@ -70,39 +71,39 @@ if [[ -f "/addon_config/enable_banking_private.pem" ]]; then
     log "Found Enable Banking private key at /addon_config/enable_banking_private.pem"
 fi
 
-SIMPLEFIN_ENABLED="$(bashio::config 'simplefin_enabled')"
-SIMPLEFIN_API_URL="$(bashio::config 'simplefin_api_url')"
+SIMPLEFIN_ENABLED="$(bashio::config 'simplefin_enabled' 'false')"
+SIMPLEFIN_API_URL="$(bashio::config 'simplefin_api_url' 'https://beta-bridge.simplefin.org')"
 
-OIDC_ENABLED="$(bashio::config 'oidc_enabled')"
-OIDC_PROVIDER_NAME="$(bashio::config 'oidc_provider_name')"
-OIDC_DISCOVERY_URL="$(bashio::config 'oidc_discovery_url')"
-OIDC_CLIENT_ID="$(bashio::config 'oidc_client_id')"
-OIDC_CLIENT_SECRET="$(bashio::config 'oidc_client_secret')"
-OIDC_REDIRECT_URI="$(bashio::config 'oidc_redirect_uri')"
-OIDC_SCOPES="$(bashio::config 'oidc_scopes')"
-OIDC_AUTO_REGISTER="$(bashio::config 'oidc_auto_register')"
-OIDC_REQUIRE_VERIFIED_EMAIL="$(bashio::config 'oidc_require_verified_email')"
-OIDC_SYNC_ROLES="$(bashio::config 'oidc_sync_roles')"
-OIDC_ROLES_CLAIM="$(bashio::config 'oidc_roles_claim')"
-OIDC_ADMIN_ROLES="$(bashio::config 'oidc_admin_roles')"
-OIDC_WORKSPACE_ROLE_MAP="$(bashio::config 'oidc_workspace_role_map')"
+OIDC_ENABLED="$(bashio::config 'oidc_enabled' 'false')"
+OIDC_PROVIDER_NAME="$(bashio::config 'oidc_provider_name' 'OIDC')"
+OIDC_DISCOVERY_URL="$(bashio::config 'oidc_discovery_url' '')"
+OIDC_CLIENT_ID="$(bashio::config 'oidc_client_id' '')"
+OIDC_CLIENT_SECRET="$(bashio::config 'oidc_client_secret' '')"
+OIDC_REDIRECT_URI="$(bashio::config 'oidc_redirect_uri' '')"
+OIDC_SCOPES="$(bashio::config 'oidc_scopes' 'openid email profile')"
+OIDC_AUTO_REGISTER="$(bashio::config 'oidc_auto_register' 'true')"
+OIDC_REQUIRE_VERIFIED_EMAIL="$(bashio::config 'oidc_require_verified_email' 'true')"
+OIDC_SYNC_ROLES="$(bashio::config 'oidc_sync_roles' 'false')"
+OIDC_ROLES_CLAIM="$(bashio::config 'oidc_roles_claim' 'groups')"
+OIDC_ADMIN_ROLES="$(bashio::config 'oidc_admin_roles' '')"
+OIDC_WORKSPACE_ROLE_MAP="$(bashio::config 'oidc_workspace_role_map' '')"
 
-OPENEXCHANGERATES_APP_ID="$(bashio::config 'openexchangerates_app_id')"
-FX_SYNC_MODE="$(bashio::config 'fx_sync_mode')"
+OPENEXCHANGERATES_APP_ID="$(bashio::config 'openexchangerates_app_id' '')"
+FX_SYNC_MODE="$(bashio::config 'fx_sync_mode' 'on_demand')"
 
-TESOURO_DIRETO_ENABLED="$(bashio::config 'tesouro_direto_enabled')"
+TESOURO_DIRETO_ENABLED="$(bashio::config 'tesouro_direto_enabled' 'true')"
 
-WEBAUTHN_RP_ID="$(bashio::config 'webauthn_rp_id')"
-WEBAUTHN_RP_NAME="$(bashio::config 'webauthn_rp_name')"
+WEBAUTHN_RP_ID="$(bashio::config 'webauthn_rp_id' '')"
+WEBAUTHN_RP_NAME="$(bashio::config 'webauthn_rp_name' 'Securo')"
 
-AGENTS_ENABLED="$(bashio::config 'agents_enabled')"
-AGENTS_DEFAULT_PROVIDER="$(bashio::config 'agents_default_provider')"
-AGENTS_DEFAULT_MODEL="$(bashio::config 'agents_default_model')"
-AGENTS_OLLAMA_BASE_URL="$(bashio::config 'agents_ollama_base_url')"
-AGENTS_OPENAI_API_KEY="$(bashio::config 'agents_openai_api_key')"
-AGENTS_ANTHROPIC_API_KEY="$(bashio::config 'agents_anthropic_api_key')"
-AGENTS_OPENAI_COMPAT_BASE_URL="$(bashio::config 'agents_openai_compat_base_url')"
-AGENTS_OPENAI_COMPAT_API_KEY="$(bashio::config 'agents_openai_compat_api_key')"
+AGENTS_ENABLED="$(bashio::config 'agents_enabled' 'false')"
+AGENTS_DEFAULT_PROVIDER="$(bashio::config 'agents_default_provider' 'ollama')"
+AGENTS_DEFAULT_MODEL="$(bashio::config 'agents_default_model' '')"
+AGENTS_OLLAMA_BASE_URL="$(bashio::config 'agents_ollama_base_url' 'http://ollama:11434')"
+AGENTS_OPENAI_API_KEY="$(bashio::config 'agents_openai_api_key' '')"
+AGENTS_ANTHROPIC_API_KEY="$(bashio::config 'agents_anthropic_api_key' '')"
+AGENTS_OPENAI_COMPAT_BASE_URL="$(bashio::config 'agents_openai_compat_base_url' '')"
+AGENTS_OPENAI_COMPAT_API_KEY="$(bashio::config 'agents_openai_compat_api_key' '')"
 
 # Internal fixed values
 DATABASE_URL="postgresql+asyncpg://securo:securo@localhost:5432/securo"
