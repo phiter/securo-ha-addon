@@ -1,0 +1,30 @@
+run.sh
+  h_43f70d35f085ea 1-210
+DOCS.md
+  h_43f70d35f085ea 1-131
+rootfs/opt/securo/scripts/start-backend.sh
+  h_43f70d35f085ea 1-14
+rootfs/etc/nginx/sites-available/securo
+  h_43f70d35f085ea 1-66
+translations/en.yaml
+  h_43f70d35f085ea 1-157
+config.yaml
+  h_43f70d35f085ea 1-140
+build.yaml
+  h_43f70d35f085ea 1-14
+Dockerfile
+  h_43f70d35f085ea 1-97
+rootfs/etc/supervisor/conf.d/securo.conf
+  h_43f70d35f085ea 1-78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "6477c57c4a7b619a9afdbec3100dd4a16f7cd667",
+  "prompts": {},
+  "humans": {
+    "h_43f70d35f085ea": {
+      "author": "Phiter Fernandes <phiterfernandes@gmail.com>"
+    }
+  }
+}
