@@ -1,0 +1,21 @@
+config.yaml
+  s_d111df47d754a4::t_dea73520358137 3
+run.sh
+  s_d111df47d754a4::t_3a6fa56b345f9b 42-43,53,57-58,60-61,63-65,74-106
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "b0ba5e3bd687c7b1a773b503ae7fe382c6e8e874",
+  "prompts": {},
+  "sessions": {
+    "s_d111df47d754a4": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "e5fe65c0-72c0-42f2-8559-c0c078e51f89",
+        "model": "claude-sonnet-4.6"
+      },
+      "human_author": "Phiter Fernandes <phiterfernandes@gmail.com>"
+    }
+  }
+}
