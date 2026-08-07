@@ -143,6 +143,9 @@ mkdir -p \
     "${DATA_DIR}/logs" \
     "${DATA_DIR}/redis"
 
+# postgres user (not root) writes its log here
+chown postgres:postgres "${DATA_DIR}/logs"
+
 # ---------------------------------------------------------------------------- #
 # PostgreSQL — initialize data directory if first run
 # ---------------------------------------------------------------------------- #
