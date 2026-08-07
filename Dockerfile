@@ -1,0 +1,97 @@
+ARG BUILD_FROM
+FROM $BUILD_FROM
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# ---------------------------------------------------------------------------- #
+# System dependencies
+# ---------------------------------------------------------------------------- #
+# Install PostgreSQL APT repository for version 16 (required for pgvector)
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        gnupg \
+        curl \
+        lsb-release \
+        ca-certificates \
+    && curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+        | gpg --dearmor -o /usr/share/keyrings/postgresql-keyring.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/postgresql-keyring.gpg] \
+        https://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" \
+        > /etc/apt/sources.list.d/pgdg.list \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        # PostgreSQL 16 + pgvector (required for AI agents RAG feature)
+        postgresql-16 \
+        postgresql-16-pgvector \
+        # Redis
+        redis-server \
+        # Python
+        python3 \
+        python3-venv \
+        python3-pip \
+        python3-dev \
+        # Build tools for native Python extensions
+        build-essential \
+        libpq-dev \
+        libffi-dev \
+        libssl-dev \
+        # Nginx (frontend static files + reverse proxy)
+        nginx \
+        # Process supervisor
+        supervisor \
+        # Utilities
+        git \
+        gettext-base \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js 20 (for building the React frontend)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+# ---------------------------------------------------------------------------- #
+# Clone Securo and build backend
+# ---------------------------------------------------------------------------- #
+WORKDIR /opt/securo
+
+ARG SECURO_REF=main
+RUN git clone --depth=1 --branch "${SECURO_REF}" \
+        https://github.com/securo-finance/securo.git . \
+    && git log --oneline -1
+
+# Create Python virtual environment and install backend
+RUN python3 -m venv /opt/securo-venv \
+    && /opt/securo-venv/bin/pip install --upgrade --no-cache-dir pip \
+    && cd backend \
+    && /opt/securo-venv/bin/pip install --no-cache-dir -e .
+
+# ---------------------------------------------------------------------------- #
+# Build frontend
+# ---------------------------------------------------------------------------- #
+RUN cd frontend \
+    && npm ci --no-audit --no-fund \
+    && npm run build \
+    && rm -rf node_modules
+
+# ---------------------------------------------------------------------------- #
+# Copy overlay files and startup script
+# ---------------------------------------------------------------------------- #
+COPY rootfs /
+COPY run.sh /run.sh
+
+# Configure nginx
+RUN rm -f /etc/nginx/sites-enabled/default \
+    && ln -sf /etc/nginx/sites-available/securo /etc/nginx/sites-enabled/securo
+
+# Nginx and supervisor log directories
+RUN mkdir -p \
+        /var/log/supervisor \
+        /var/log/nginx \
+        /run/nginx
+
+# Make scripts executable
+RUN chmod +x /run.sh /opt/securo/scripts/start-backend.sh
+
+CMD ["/run.sh"]

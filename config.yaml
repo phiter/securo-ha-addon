@@ -1,0 +1,140 @@
+name: Securo
+description: Open-source personal finance manager. Self-hosted, privacy-first. Multi-account, bank sync, budgets, goals, reports, and optional AI agents — your data never leaves your server.
+version: "1.0.0"
+slug: securo
+url: https://github.com/securo-finance/securo
+init: false
+startup: application
+boot: auto
+homeassistant: "2023.1.0"
+
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+
+ports:
+  3000/tcp: 3000
+
+ports_description:
+  3000/tcp: Securo Web Interface
+
+map:
+  - addon_config:rw
+
+ingress: true
+ingress_port: 3000
+panel_icon: mdi:bank
+panel_title: Securo
+
+options:
+  # Core
+  secret_key: ""
+  frontend_url: ""
+  frontend_port: 3000
+
+  # Bank Sync — Pluggy (Brazilian banks — https://pluggy.ai)
+  pluggy_client_id: ""
+  pluggy_client_secret: ""
+
+  # Bank Sync — Enable Banking (European PSD2 — https://enablebanking.com)
+  enable_banking_app_id: ""
+  enable_banking_oauth_redirect_uri: ""
+  enable_banking_api_url: "https://api.enablebanking.com"
+
+  # Bank Sync — SimpleFIN (US / international — https://simplefin.org)
+  simplefin_enabled: false
+  simplefin_api_url: "https://beta-bridge.simplefin.org"
+
+  # OIDC Login (Authentik, Pocket ID, or any standard OIDC provider)
+  oidc_enabled: false
+  oidc_provider_name: "OIDC"
+  oidc_discovery_url: ""
+  oidc_client_id: ""
+  oidc_client_secret: ""
+  oidc_redirect_uri: ""
+  oidc_scopes: "openid email profile"
+  oidc_auto_register: true
+  oidc_require_verified_email: true
+  oidc_sync_roles: false
+  oidc_roles_claim: "groups"
+  oidc_admin_roles: ""
+  oidc_workspace_role_map: ""
+
+  # Currency exchange rates (https://openexchangerates.org — free plan available)
+  openexchangerates_app_id: ""
+  fx_sync_mode: "on_demand"
+
+  # Brazilian Treasury bonds (Tesouro Direto)
+  tesouro_direto_enabled: true
+
+  # Passkeys / WebAuthn
+  webauthn_rp_id: ""
+  webauthn_rp_name: "Securo"
+
+  # AI Agents (optional — off by default; zero cost when off)
+  agents_enabled: false
+  agents_default_provider: "ollama"
+  agents_default_model: ""
+  agents_ollama_base_url: "http://ollama:11434"
+  agents_openai_api_key: ""
+  agents_anthropic_api_key: ""
+  agents_openai_compat_base_url: ""
+  agents_openai_compat_api_key: ""
+
+schema:
+  # Core
+  secret_key: password
+  frontend_url: str?
+  frontend_port: int
+
+  # Pluggy
+  pluggy_client_id: str?
+  pluggy_client_secret: password?
+
+  # Enable Banking
+  enable_banking_app_id: str?
+  enable_banking_oauth_redirect_uri: str?
+  enable_banking_api_url: str
+
+  # SimpleFIN
+  simplefin_enabled: bool
+  simplefin_api_url: str
+
+  # OIDC
+  oidc_enabled: bool
+  oidc_provider_name: str
+  oidc_discovery_url: str?
+  oidc_client_id: str?
+  oidc_client_secret: password?
+  oidc_redirect_uri: str?
+  oidc_scopes: str
+  oidc_auto_register: bool
+  oidc_require_verified_email: bool
+  oidc_sync_roles: bool
+  oidc_roles_claim: str
+  oidc_admin_roles: str?
+  oidc_workspace_role_map: str?
+
+  # Exchange rates
+  openexchangerates_app_id: str?
+  fx_sync_mode: list(on_demand|daily)
+
+  # Tesouro Direto
+  tesouro_direto_enabled: bool
+
+  # WebAuthn
+  webauthn_rp_id: str?
+  webauthn_rp_name: str
+
+  # AI Agents
+  agents_enabled: bool
+  agents_default_provider: list(ollama|openai|anthropic|openai_compatible)
+  agents_default_model: str?
+  agents_ollama_base_url: str?
+  agents_openai_api_key: password?
+  agents_anthropic_api_key: password?
+  agents_openai_compat_base_url: str?
+  agents_openai_compat_api_key: password?

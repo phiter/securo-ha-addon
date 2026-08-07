@@ -1,0 +1,157 @@
+configuration:
+  secret_key:
+    name: Secret Key
+    description: >-
+      Cryptographic secret used to sign sessions and tokens.
+      Generate a long random string and keep it safe.
+      If left empty, a key is auto-generated and saved across restarts.
+      Changing this value invalidates all active sessions.
+  frontend_url:
+    name: Frontend URL
+    description: >-
+      Public URL where Securo is reachable (e.g. https://securo.example.com).
+      Required for passkeys (WebAuthn), OIDC OAuth callbacks, and CORS.
+      Leave empty when accessing only via http://localhost or the HA ingress.
+  frontend_port:
+    name: Frontend Port
+    description: >-
+      TCP port Securo's web interface listens on. Defaults to 3000.
+      Change this if port 3000 is already in use on your system.
+
+  pluggy_client_id:
+    name: Pluggy Client ID
+    description: >-
+      Client ID from your Pluggy dashboard (https://dashboard.pluggy.ai).
+      Required for Brazilian bank sync. Leave empty to disable Pluggy.
+  pluggy_client_secret:
+    name: Pluggy Client Secret
+    description: Client Secret from your Pluggy dashboard.
+
+  enable_banking_app_id:
+    name: Enable Banking Application ID
+    description: >-
+      Application ID from https://enablebanking.com.
+      Required for European PSD2 bank sync. Leave empty to disable.
+      Also upload your Enable Banking PEM private key to /addon_configs/securo/enable_banking_private.pem.
+  enable_banking_oauth_redirect_uri:
+    name: Enable Banking OAuth Redirect URI
+    description: >-
+      The exact redirect URI registered in your Enable Banking application.
+      Defaults to {Frontend URL}/oauth/callback when left empty.
+  enable_banking_api_url:
+    name: Enable Banking API URL
+    description: Enable Banking API base URL. Use the default unless Enable Banking instructs otherwise.
+
+  simplefin_enabled:
+    name: Enable SimpleFIN
+    description: >-
+      Enable SimpleFIN bank sync for US and international banks.
+      After enabling, connect your bank via Accounts → Connect Bank → SimpleFIN inside Securo.
+  simplefin_api_url:
+    name: SimpleFIN API URL
+    description: >-
+      SimpleFIN Bridge URL. Use https://beta-bridge.simplefin.org for the sandbox
+      or https://bridge.simplefin.org for real banks.
+
+  oidc_enabled:
+    name: Enable OIDC Login
+    description: Allow sign-in via an external OIDC provider (Authentik, Pocket ID, etc.).
+  oidc_provider_name:
+    name: OIDC Provider Name
+    description: Label shown on the login button (e.g. "Pocket ID" or "Authentik").
+  oidc_discovery_url:
+    name: OIDC Discovery URL
+    description: >-
+      OpenID Connect discovery endpoint of your provider.
+      Example: https://id.example.com/.well-known/openid-configuration
+  oidc_client_id:
+    name: OIDC Client ID
+    description: Client ID registered in your OIDC provider.
+  oidc_client_secret:
+    name: OIDC Client Secret
+    description: Client Secret registered in your OIDC provider.
+  oidc_redirect_uri:
+    name: OIDC Redirect URI
+    description: >-
+      Override the callback URL. Defaults to {Frontend URL}/api/auth/oidc/callback.
+      Register this exact URI in your OIDC provider.
+  oidc_scopes:
+    name: OIDC Scopes
+    description: Space-separated list of OIDC scopes to request.
+  oidc_auto_register:
+    name: Auto-register OIDC Users
+    description: >-
+      Automatically create a Securo account for new OIDC users.
+      Set to false to only allow OIDC login for existing Securo accounts.
+  oidc_require_verified_email:
+    name: Require Verified Email (OIDC)
+    description: Only accept OIDC logins where the provider has verified the user's email address.
+  oidc_sync_roles:
+    name: Sync Roles from OIDC
+    description: Synchronize Securo admin and workspace roles from provider groups/roles on each login.
+  oidc_roles_claim:
+    name: OIDC Roles Claim
+    description: JWT claim name that contains the user's groups/roles in the OIDC token.
+  oidc_admin_roles:
+    name: OIDC Admin Roles
+    description: Comma-separated provider roles that grant Securo admin (superuser) status.
+  oidc_workspace_role_map:
+    name: OIDC Workspace Role Map
+    description: >-
+      JSON map of provider roles to Securo workspace roles.
+      Example: {"securo-owners":"owner","securo-editors":"editor"}
+
+  openexchangerates_app_id:
+    name: Open Exchange Rates App ID
+    description: >-
+      Free API key from https://openexchangerates.org for automatic currency conversion.
+      Without this, cross-currency amounts fall back to a 1:1 rate with a visual warning.
+  fx_sync_mode:
+    name: FX Rate Sync Mode
+    description: >-
+      "on_demand" fetches rates when a foreign-currency transaction is created.
+      "daily" pre-fetches all rates once per day.
+
+  tesouro_direto_enabled:
+    name: Enable Tesouro Direto
+    description: >-
+      Enable Brazilian Treasury bond (Tesouro Direto) lookup.
+      Disable if you want to avoid the dependency on the Brazilian government CSV endpoint.
+
+  webauthn_rp_id:
+    name: WebAuthn Relying Party ID
+    description: >-
+      Pin passkeys to a specific domain (e.g. securo.example.com).
+      Leave empty to follow the browser address automatically.
+      Use the parent domain if Securo is served on multiple subdomains.
+  webauthn_rp_name:
+    name: WebAuthn Relying Party Name
+    description: Name displayed in the browser's passkey prompt.
+
+  agents_enabled:
+    name: Enable AI Agents
+    description: >-
+      Enable self-hosted AI assistants over your Securo data.
+      Supports OpenAI, Anthropic, Ollama, and OpenAI-compatible providers.
+      Off by default; zero cost when off.
+  agents_default_provider:
+    name: AI Default Provider
+    description: Default LLM provider. Configure the matching API key or URL below.
+  agents_default_model:
+    name: AI Default Model
+    description: Default model name. Leave empty to use the provider's default.
+  agents_ollama_base_url:
+    name: Ollama Base URL
+    description: Base URL of your Ollama instance (e.g. http://192.168.1.50:11434).
+  agents_openai_api_key:
+    name: OpenAI API Key
+    description: API key for OpenAI models (gpt-4o, etc.).
+  agents_anthropic_api_key:
+    name: Anthropic API Key
+    description: API key for Anthropic Claude models.
+  agents_openai_compat_base_url:
+    name: OpenAI-Compatible Base URL
+    description: Base URL of an OpenAI-compatible API (LM Studio, vLLM, Together AI, etc.).
+  agents_openai_compat_api_key:
+    name: OpenAI-Compatible API Key
+    description: API key for the OpenAI-compatible endpoint (leave empty if none required).
