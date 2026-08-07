@@ -2,7 +2,7 @@
 # =============================================================================
 # Securo Finance — Home Assistant Add-on startup script
 # =============================================================================
-set -euo pipefail
+set -eu
 
 DATA_DIR=/data
 PG_DATA_DIR="${DATA_DIR}/postgres"
@@ -47,7 +47,7 @@ if bashio::var.is_empty "${SECRET_KEY}"; then
         SECRET_KEY="$(cat "${SECRET_KEY_FILE}")"
         log "Using persisted secret key."
     else
-        SECRET_KEY="$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 64)"
+        SECRET_KEY="$(openssl rand -hex 32)"
         echo "${SECRET_KEY}" > "${SECRET_KEY_FILE}"
         chmod 600 "${SECRET_KEY_FILE}"
         warn "No secret_key configured — generated a random key. Set a static key in options to persist sessions across reinstalls."
@@ -111,7 +111,7 @@ REDIS_URL="redis://localhost:6379/0"
 STORAGE_LOCAL_PATH="${DATA_DIR}/attachments"
 AGENTS_KNOWLEDGE_STORAGE_PATH="${DATA_DIR}/agent_knowledge"
 AGENTS_EMBEDDING_MODELS_PATH="${DATA_DIR}/embedding_models"
-AGENTS_MCP_JWT_SECRET="$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 64)"
+AGENTS_MCP_JWT_SECRET="$(openssl rand -hex 32)"
 
 # ---------------------------------------------------------------------------- #
 # Export all env vars (supervisord child processes will inherit these)
