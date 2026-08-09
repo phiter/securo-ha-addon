@@ -5,9 +5,9 @@ server {
     root /opt/securo/frontend/dist;
     index index.html;
 
-    # Inject <base> tag so the frontend resolves assets and API calls relative
-    # to the HA ingress path at runtime (X-Ingress-Path header from HA supervisor)
-    sub_filter '<head>' '<head><base href="$http_x_ingress_path/">';
+    # Inject <base> tag only when accessed via HA ingress (X-Ingress-Path set).
+    # No-op when accessed directly on :3000 so relative assets resolve normally.
+    sub_filter '<head>' '$ha_ingress_head_replacement';
     sub_filter_once on;
     sub_filter_types text/html;
 
