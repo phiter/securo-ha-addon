@@ -56,7 +56,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 # ---------------------------------------------------------------------------- #
 WORKDIR /opt/securo
 
-ARG SECURO_REF=main
+ARG SECURO_REF=v0.14.0
 RUN git clone --depth=1 --branch "${SECURO_REF}" \
         https://github.com/securo-finance/securo.git . \
     && git log --oneline -1
