@@ -1,0 +1,35 @@
+patches/frontend/App.tsx
+  s_d111df47d754a4::t_ab219ed902e3a1 1-116
+patches/frontend/vite.config.ts
+  s_d111df47d754a4::t_ab219ed902e3a1 1-58
+rootfs/etc/nginx/sites-available/securo
+  s_d111df47d754a4::t_39d69e594e3e22 8-13
+config.yaml
+  s_d111df47d754a4::t_20a48672d09592 22-31
+  s_d111df47d754a4::t_072fa22d69a213 21
+  s_d111df47d754a4::t_82783a9b9be3fc 3
+patches/frontend/api.ts
+  s_d111df47d754a4::t_ab219ed902e3a1 1-1535
+patches/frontend/login.tsx
+  s_d111df47d754a4::t_ab219ed902e3a1 1-363
+patches/frontend/base-path.ts
+  s_d111df47d754a4::t_ab219ed902e3a1 1-18
+Dockerfile
+  s_d111df47d754a4::t_151645a97caa8f 64-71
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "056d8c8ef332c99d39e54300b79b4e9bb0927a6e",
+  "prompts": {},
+  "sessions": {
+    "s_d111df47d754a4": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "e5fe65c0-72c0-42f2-8559-c0c078e51f89",
+        "model": "claude-sonnet-4.6"
+      },
+      "human_author": "Phiter Fernandes <phiterfernandes@gmail.com>"
+    }
+  }
+}
