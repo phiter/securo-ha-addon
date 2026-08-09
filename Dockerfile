@@ -78,9 +78,13 @@ RUN python3 -m venv /opt/securo-venv \
 # ---------------------------------------------------------------------------- #
 # Build frontend
 # ---------------------------------------------------------------------------- #
+# VITE_BASE_PATH=./ makes all asset paths relative so they resolve correctly
+# through HA ingress (which prefixes a dynamic token path). The nginx
+# sub_filter always injects <base href="..."> so relative paths land correctly
+# for both ingress and direct :3000 access.
 RUN cd frontend \
     && npm ci --no-audit --no-fund \
-    && npm run build \
+    && VITE_BASE_PATH=./ npm run build \
     && rm -rf node_modules
 
 # ---------------------------------------------------------------------------- #
