@@ -1,0 +1,23 @@
+rootfs/etc/nginx/conf.d/ha-ingress.conf
+  s_d111df47d754a4::t_f27ae9c67bf722 1-7
+config.yaml
+  s_d111df47d754a4::t_b038ad815dd909 3
+rootfs/etc/nginx/sites-available/securo
+  s_d111df47d754a4::t_72fa846bf10514 8-10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "7165780aa82bed4f1d305bda3f8621dff37569e8",
+  "prompts": {},
+  "sessions": {
+    "s_d111df47d754a4": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "e5fe65c0-72c0-42f2-8559-c0c078e51f89",
+        "model": "claude-sonnet-4.6"
+      },
+      "human_author": "Phiter Fernandes <phiterfernandes@gmail.com>"
+    }
+  }
+}
