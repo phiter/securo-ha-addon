@@ -1,0 +1,21 @@
+Dockerfile
+  s_d111df47d754a4::t_c6852acb81926c 81-84,87
+config.yaml
+  s_d111df47d754a4::t_de5d84fe5ad34c 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "829f5ea03566e2acad5057a23c1474a12dbf6904",
+  "prompts": {},
+  "sessions": {
+    "s_d111df47d754a4": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "e5fe65c0-72c0-42f2-8559-c0c078e51f89",
+        "model": "claude-sonnet-4.6"
+      },
+      "human_author": "Phiter Fernandes <phiterfernandes@gmail.com>"
+    }
+  }
+}
