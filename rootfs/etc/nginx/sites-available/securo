@@ -5,6 +5,12 @@ server {
     root /opt/securo/frontend/dist;
     index index.html;
 
+    # Inject <base> tag so the frontend resolves assets and API calls relative
+    # to the HA ingress path at runtime (X-Ingress-Path header from HA supervisor)
+    sub_filter '<head>' '<head><base href="$http_x_ingress_path/">';
+    sub_filter_once on;
+    sub_filter_types text/html;
+
     # Enable gzip compression
     gzip on;
     gzip_vary on;

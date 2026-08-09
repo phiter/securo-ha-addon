@@ -1,6 +1,6 @@
 name: Securo
 description: Open-source personal finance manager. Self-hosted, privacy-first. Multi-account, bank sync, budgets, goals, reports, and optional AI agents — your data never leaves your server.
-version: "1.14.0"
+version: "1.14.1"
 slug: securo
 url: https://github.com/securo-finance/securo
 init: false
@@ -17,6 +17,17 @@ arch:
 
 ports:
   3000/tcp: 3000
+
+ports_description:
+  3000/tcp: Securo Web Interface (direct access)
+
+map:
+  - addon_config:rw
+
+ingress: true
+ingress_port: 3000
+panel_icon: mdi:bank
+panel_title: Securo
 
 ports_description:
   3000/tcp: Securo Web Interface

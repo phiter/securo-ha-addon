@@ -61,6 +61,14 @@ RUN git clone --depth=1 --branch "${SECURO_REF}" \
         https://github.com/securo-finance/securo.git . \
     && git log --oneline -1
 
+# Copy frontend patches (base-path support; to be removed once merged upstream)
+COPY patches/frontend/ /opt/securo-patches/frontend/
+RUN cp /opt/securo-patches/frontend/base-path.ts frontend/src/lib/base-path.ts \
+    && cp /opt/securo-patches/frontend/App.tsx       frontend/src/App.tsx \
+    && cp /opt/securo-patches/frontend/api.ts        frontend/src/lib/api.ts \
+    && cp /opt/securo-patches/frontend/login.tsx     frontend/src/pages/login.tsx \
+    && cp /opt/securo-patches/frontend/vite.config.ts frontend/vite.config.ts
+
 # Create Python virtual environment and install backend
 RUN python3 -m venv /opt/securo-venv \
     && /opt/securo-venv/bin/pip install --upgrade --no-cache-dir pip \
