@@ -1,6 +1,6 @@
 name: Securo
 description: Open-source personal finance manager. Self-hosted, privacy-first. Multi-account, bank sync, budgets, goals, reports, and optional AI agents — your data never leaves your server.
-version: "1.14.4"
+version: "1.14.1"
 slug: securo
 url: https://github.com/securo-finance/securo
 init: false
